@@ -10,7 +10,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.data.domain.Pageable;
 
-import com.backend.dto.UserDto;
+import com.backend.dto.user.UserDto;
 import com.backend.entity.user.User;
 
 /**

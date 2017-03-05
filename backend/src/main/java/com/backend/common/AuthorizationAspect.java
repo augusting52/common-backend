@@ -41,7 +41,7 @@ public class AuthorizationAspect {
 	 * @param joinPoint
 	 * @throws Exception
 	 */
-	@Before(value = "@annotation(cn.zstu.backend.common.LoginRequired)")
+	@Before(value = "@annotation(com.backend.common.LoginRequired)")
 	public void check(JoinPoint joinPoint) throws Exception {
 		String userToken = getUserToken(joinPoint);
 		userService.getCurrentUserByToken(userToken);
