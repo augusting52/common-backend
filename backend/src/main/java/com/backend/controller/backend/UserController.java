@@ -18,6 +18,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.backend.common.BackendException;
+import com.backend.constants.Pages;
+import com.backend.constants.UserConstants;
 import com.backend.dto.user.UserDto;
 import com.backend.service.UserService;
 
@@ -36,6 +38,39 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public ModelAndView login(@RequestParam String loginAccount, @RequestParam String loginPwd, HttpServletResponse response) {
+		try {
+			String token = userService.login(loginAccount,  loginPwd);
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName(Pages.PAGE_INDEX);
+			mav.addObject(UserConstants.USER, userService.getCurrentUserByToken(token).getName());
+			Cookie cookie = new Cookie(UserConstants.TOKEN, token);
+			cookie.setPath("/");
+			cookie.setMaxAge(3600);
+			response.addCookie(cookie);
+			try {
+				response.sendRedirect("/backend/main");
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			return mav;
+		} catch (BackendException e) {
+			ModelAndView mav = new ModelAndView();
+			mav.setViewName(Pages.PAGE_INDEX);
+			mav.addObject(UserConstants.USER, loginAccount);
+			mav.addObject(UserConstants.PASSWORD, loginPwd);
+			switch (e.getErrorCode()) {
+			case 100005:
+				mav.addObject("message", "NotExist");
+				break;
+			}
+			return mav;
+		}
+	}
+
 	/**
 	 * 用户登录
 	 * 
@@ -47,14 +82,13 @@ public class UserController {
 	@RequestMapping(value = "", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public ModelAndView loginPage(@RequestParam() String mobile,
-			@RequestParam() String password, HttpServletResponse response) {
+	public ModelAndView loginPage(@RequestParam() String mobile, @RequestParam() String password,
+			HttpServletResponse response) {
 		try {
 			String token = userService.login(mobile, password);
 			ModelAndView mav = new ModelAndView();
 			mav.setViewName("main");
-			mav.addObject("User", userService.getCurrentUserByToken(token)
-					.getName());
+			mav.addObject("User", userService.getCurrentUserByToken(token).getName());
 			// mav.addObject("User", mobile);
 			/* mav.addObject("Token", token); */
 			Cookie cookie = new Cookie("token", token);
@@ -82,7 +116,7 @@ public class UserController {
 	}
 
 	/**
-	 * 登录页面
+	 * 登录页面, 默认页面
 	 * 
 	 * @return ModelAndView
 	 */
@@ -90,7 +124,7 @@ public class UserController {
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public ModelAndView showLoginPage() {
-		return new ModelAndView("index");
+		return new ModelAndView("login");
 	}
 
 	/**
@@ -111,19 +145,13 @@ public class UserController {
 	@RequestMapping(value = "backend/users", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public Page<UserDto> getUserByPage(
-			@RequestParam(defaultValue = "0") int currentPage,
-			@RequestParam(defaultValue = "10") int pageSize,
-			@RequestParam(defaultValue = "period") String sortProperty,
-			@RequestParam(defaultValue = "DESC") String sortDirection,
-			@RequestParam String email,
-			@RequestParam int gender,
-			@RequestParam String mobile,
-			@RequestParam String name,
-			@RequestParam int point,
+	public Page<UserDto> getUserByPage(@RequestParam(defaultValue = "0") int currentPage,
+			@RequestParam(defaultValue = "10") int pageSize, @RequestParam(defaultValue = "period") String sortProperty,
+			@RequestParam(defaultValue = "DESC") String sortDirection, @RequestParam String email,
+			@RequestParam int gender, @RequestParam String mobile, @RequestParam String name, @RequestParam int point,
 			@CookieValue(defaultValue = "token", value = "token") String userToken) {
-		return userService.listUserByPage(currentPage, pageSize, sortDirection,
-				sortProperty, email, gender, mobile, name, point);
+		return userService.listUserByPage(currentPage, pageSize, sortDirection, sortProperty, email, gender, mobile,
+				name, point);
 	}
 
 }

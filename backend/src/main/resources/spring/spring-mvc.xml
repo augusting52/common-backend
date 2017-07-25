@@ -24,19 +24,19 @@
 	<mvc:resources location="/build/" mapping="/build/**" />
 
 	<!-- ViewResolver & View 映射关系 -->
-	<!-- <bean
+	<bean
 		class="org.springframework.web.servlet.view.InternalResourceViewResolver">
 		<property name="prefix" value="/views/" />
 		<property name="suffix" value=".jsp" />
-		InternalResourceViewResolver viewClass默认值就是JstlView
+		<!-- InternalResourceViewResolver viewClass默认值就是JstlView -->
 		<property name="viewClass"
 			value="org.springframework.web.servlet.view.JstlView"></property>
-	</bean> -->
-	<bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
+	</bean>
+<!-- 	<bean  class="org.springframework.web.servlet.view.InternalResourceViewResolver">  
         <property name="prefix" value="/views/" />
         <property name="suffix" value=".html" />
         <property name="contentType" value="text/html"></property>  
-    </bean>  
+    </bean>   -->
 	<!-- 拦截器配置 -->
 	<mvc:interceptors>
 		<bean
