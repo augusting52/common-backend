@@ -20,7 +20,7 @@
 
 	<mvc:annotation-driven />
 	<mvc:resources location="/static/" mapping="/static/**" />
-	<mvc:resources location="/vendors/" mapping="/static/**" />
+	<mvc:resources location="/vendors/" mapping="/vendors/**" />
 	<mvc:resources location="/build/" mapping="/build/**" />
 
 	<!-- ViewResolver & View 映射关系 -->

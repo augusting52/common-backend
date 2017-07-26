@@ -7,4 +7,6 @@ public class Constants {
 
 	public static final String URL_PATH_PREFIX = "/";
 	
+	public static final String BACKEND = "backend";
+	
 }
