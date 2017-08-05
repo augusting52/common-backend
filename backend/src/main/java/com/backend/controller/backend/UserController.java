@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.servlet.ModelAndView;
 
 import com.backend.common.BackendException;
+import com.backend.constants.Constants;
 import com.backend.constants.Pages;
 import com.backend.constants.UserConstants;
 import com.backend.dto.user.UserDto;
@@ -38,6 +39,13 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
+	/**
+	 * 用户登录
+	 * @param loginAccount 登录账号
+	 * @param loginPwd 登录密码
+	 * @param response 接口响应
+	 * @return
+	 */
 	@RequestMapping(value = "login", method = RequestMethod.POST)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
@@ -48,23 +56,23 @@ public class UserController {
 			mav.setViewName(Pages.PAGE_INDEX);
 			mav.addObject(UserConstants.USER, userService.getCurrentUserByToken(token).getName());
 			Cookie cookie = new Cookie(UserConstants.TOKEN, token);
-			cookie.setPath("/");
+			cookie.setPath(Constants.URL_PATH_PREFIX);
 			cookie.setMaxAge(3600);
 			response.addCookie(cookie);
 			try {
-				response.sendRedirect("/backend/main");
+				response.sendRedirect(Pages.URL_PAGE_INDEX);
 			} catch (IOException e) {
 				e.printStackTrace();
 			}
 			return mav;
 		} catch (BackendException e) {
 			ModelAndView mav = new ModelAndView();
-			mav.setViewName(Pages.PAGE_INDEX);
+			mav.setViewName(Pages.PAGE_LOGIN);
 			mav.addObject(UserConstants.USER, loginAccount);
 			mav.addObject(UserConstants.PASSWORD, loginPwd);
 			switch (e.getErrorCode()) {
 			case 100005:
-				mav.addObject("message", "NotExist");
+				mav.addObject(Constants.MESSAGE, Constants.USER_NOT_EXIST);
 				break;
 			}
 			return mav;

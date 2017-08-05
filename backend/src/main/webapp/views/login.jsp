@@ -20,6 +20,14 @@
 
     <!-- Custom Theme Style -->
     <link href="../build/css/custom.min.css" rel="stylesheet">
+
+    <script type="text/javascript">
+      function login() {
+        alert("login");
+      }
+    </script>
+
+
   </head>
 
   <body class="login">
@@ -30,16 +38,18 @@
       <div class="login_wrapper">
         <div class="animate form login_form">
           <section class="login_content">
-            <form>
+            <form action="/login" onsubmit="login()" method="post">
               <h1>Login Form</h1>
               <div>
-                <input type="text" class="form-control" placeholder="Username" required="" />
+                <input id="account" type="text" class="form-control" placeholder="Account" name="loginAccount" required="" />
               </div>
               <div>
-                <input type="password" class="form-control" placeholder="Password" required="" />
+                <input id="pwd" type="password" class="form-control" placeholder="Password" name="loginPwd" required="" />
               </div>
               <div>
-                <a class="btn btn-default submit" href="/views/index.jsp">Log in</a>
+                <input id="login" class="btn btn-default submit" type="submit" value="Log in" />
+                <!-- <input id="forgotPwd" class="btn btn-default submit" type="submit" value="Lost your password?" /> -->
+                <!-- <a class="btn btn-default submit" href="/views/index.jsp">Log in</a> -->
                 <a class="reset_pass" href="#">Lost your password?</a>
               </div>
 
@@ -55,7 +65,7 @@
 
                 <div>
                   <h1><i class="fa fa-paw"></i> I love Rechal</h1>
-                  <p>©2016 All Rights Reserved. A Gift For My Girl Friend!</p>
+                  <p>©2017 All Rights Reserved. A Gift For My Girl Friend!</p>
                 </div>
               </div>
             </form>
@@ -91,7 +101,7 @@
 
                 <div>
                   <h1><i class="fa fa-paw"></i> I love Rechal</h1>
-                  <p>©2016 All Rights Reserved. A Gift For My Girl Friend!</p>
+                  <p>©2017 All Rights Reserved. A Gift For My Girl Friend!</p>
                 </div>
               </div>
             </form>

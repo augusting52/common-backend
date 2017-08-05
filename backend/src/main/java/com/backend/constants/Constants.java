@@ -9,4 +9,8 @@ public class Constants {
 	
 	public static final String BACKEND = "backend";
 	
+	public static final String MESSAGE = "message";
+	
+	public static final String USER_NOT_EXIST = "user not exist";
+	
 }

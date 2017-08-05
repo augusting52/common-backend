@@ -24,5 +24,7 @@ public class Pages {
 	 * </p>
 	 */
 	public static final String PAGE_INDEX = "index";
+	
+	public static final String URL_PAGE_INDEX = Constants.BACKEND + Constants.URL_PATH_PREFIX + "index";
 
 }
