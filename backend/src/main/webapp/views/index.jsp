@@ -62,7 +62,7 @@
                   <li><a><i class="fa fa-home"></i>Home<span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
                       <li><a href="index.html">Home</a></li>
-                      <li><a href="index.html">LI BABY</a></li>
+                      <li><a href="index.html">LI Baby</a></li>
                       <li><a href="index.html">We</a></li>
                     </ul>
                   </li>
@@ -91,6 +91,11 @@
                       <li><a href="index.html">LIFE</a></li>
                     </ul>
                   </li>
+                   <li><a><i class="fa fa-clone"></i>LIFE<span class="fa fa-chevron-down"></span></a>
+                    <ul class="nav child_menu">
+                      <li><a href="index.html">LIFE</a></li>
+                    </ul>
+                  </li>
                 </ul>
               </div>
               <div class="menu_section">
@@ -98,11 +103,7 @@
                 <ul class="nav side-menu">
                   <li><a><i class="fa fa-bug"></i> Additional Pages <span class="fa fa-chevron-down"></span></a>
                     <ul class="nav child_menu">
-                      <li><a href="e_commerce.html">E-commerce</a></li>
-                      <li><a href="projects.html">Projects</a></li>
-                      <li><a href="project_detail.html">Project Detail</a></li>
-                      <li><a href="contacts.html">Contacts</a></li>
-                      <li><a href="profile.html">Profile</a></li>
+                      <li><a href="index.html">Coming soon</a></li>
                     </ul>
                   </li>
                   <li><a><i class="fa fa-windows"></i> Extras <span class="fa fa-chevron-down"></span></a>
@@ -169,7 +170,7 @@
               <ul class="nav navbar-nav navbar-right">
                 <li class="">
                   <a href="javascript:;" class="user-profile dropdown-toggle" data-toggle="dropdown" aria-expanded="false">
-                    <img src="/static/images/img.jpg" alt="">John Doe
+                    <img src="/static/images/img.jpg" alt="">Li Bing
                     <span class=" fa fa-angle-down"></span>
                   </a>
                   <ul class="dropdown-menu dropdown-usermenu pull-right">

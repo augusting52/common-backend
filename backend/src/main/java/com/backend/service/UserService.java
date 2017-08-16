@@ -382,4 +382,13 @@ public class UserService {
 			user.setAvator(para.get("avator"));
 		}
 	}
+
+	/**
+	 * @param userToken
+	 * @return
+	 */
+	public Object getUserInfo(String userToken) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
