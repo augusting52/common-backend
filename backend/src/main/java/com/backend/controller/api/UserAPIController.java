@@ -17,11 +17,24 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.multipart.MultipartFile;
 
 import com.backend.common.BackendException;
+import com.backend.constants.ExceptionCode;
+import com.backend.constants.UserConstants;
 import com.backend.dto.APIResult;
 import com.backend.service.UserService;
 import com.backend.util.RandomUtil;
 
 /**
+ * <p>
+ * User API 接口设计说明。
+ * 1. 用户注册接口
+ * 2. 用户登录接口
+ * 3. 刷新Token接口
+ * 4. 修改密码接口
+ * 5. 上传头像接口
+ * 6. 上传用户信息接口
+ * 7. 修改用户信息接口
+ * </p>
+ * 
  * @author libing  @date 2017年8月9日
  */
 @Controller
@@ -40,20 +53,21 @@ public class UserAPIController {
 	 * 接口：IPAddress/api/user/
 	 * </p>
 	 * 
-	 * @param parameters
+	 * @param parameters contais user account and user password
 	 * @return APIResult
 	 */
-	@RequestMapping(value = "login", method = RequestMethod.POST)
+	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
 	public APIResult<Map<String, String>> createUser(
 			@RequestBody Map<String, String> parameters) {
-		if (parameters.get("userAccount") == null
-				|| parameters.get("userPwd") == null) {
-			throw new BackendException(100010);
+		if (parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT) == null
+				|| parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD) == null) {
+			throw new BackendException(ExceptionCode.REQUEST_PARAMS_NULL);
 		}
-		String userToken = userService.createUser(parameters.get("mobile"),
-				parameters.get("password"));
+		// TODO 密码非明文传输，用户账号类型判断｛手机号码，邮箱，或者用户名等｝
+		String userToken = userService.createUser(parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT),
+				parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD));
 		return generateTokenResult(userToken);
 	}
 

@@ -17,6 +17,14 @@ public class UserConstants {
 	
 	public static final String PASSWORD = "password";
 	
+	/**
+	 * 用户登录/注册账号
+	 */
+	public static final String PARAM_KEY_USER_ACCOUNT = "userAccount";
 	
+	/**
+	 * 用户登录/注册密码
+	 */
+	public static final String PARAM_KEY_USER_PASSWORD = "userPwd";
 	
 }
