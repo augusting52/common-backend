@@ -27,7 +27,6 @@ public class User extends BaseEntity {
 	private Date tokenCreateTime;
 	private UserInfo userInfo;
 	private String userToken;
-	private Integer point;
 	private String avator;
 
 	@Column(name = "email", unique = true, length = 50)
@@ -79,11 +78,6 @@ public class User extends BaseEntity {
 		return userToken;
 	}
 	
-	@Column(name = "point", precision = 20, scale = 0, columnDefinition = "INT DEFAULT 0")
-	public Integer getPoint() {
-		return point;
-	}
-
 	public void setEmail(String email) {
 		this.email = email;
 	}
@@ -118,10 +112,6 @@ public class User extends BaseEntity {
 
 	public void setUserToken(String userToken) {
 		this.userToken = userToken;
-	}
-
-	public void setPoint(Integer point) {
-		this.point = point;
 	}
 
 	@Column(name = "avator", length = 300)

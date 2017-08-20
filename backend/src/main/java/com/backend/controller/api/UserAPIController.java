@@ -25,22 +25,16 @@ import com.backend.util.RandomUtil;
 
 /**
  * <p>
- * User API 接口设计说明。
- * 1. 用户注册接口
- * 2. 用户登录接口
- * 3. 刷新Token接口
- * 4. 修改密码接口
- * 5. 上传头像接口
- * 6. 上传用户信息接口
- * 7. 修改用户信息接口
+ * User API 接口设计说明。 1. 用户注册接口 2. 用户登录接口 3. 刷新Token接口 4. 修改密码接口 5. 上传头像接口 6.
+ * 上传用户信息接口 7. 修改用户信息接口
  * </p>
  * 
- * @author libing  @date 2017年8月9日
+ * @author libing @date 2017年8月9日
  */
 @Controller
-@RequestMapping(value = "/")
+@RequestMapping(value = "/api/user/")
 public class UserAPIController {
-	
+
 	/**
 	 * 用户服务类
 	 */
@@ -50,17 +44,17 @@ public class UserAPIController {
 	/**
 	 * 客户端注册用户.
 	 * <p>
-	 * 接口：IPAddress/api/user/
+	 * 接口：IPAddress/api/user/register
 	 * </p>
 	 * 
-	 * @param parameters contais user account and user password
+	 * @param parameters
+	 *            contais user account and user password
 	 * @return APIResult
 	 */
 	@RequestMapping(value = "/register", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public APIResult<Map<String, String>> createUser(
-			@RequestBody Map<String, String> parameters) {
+	public APIResult<Map<String, String>> createUser(@RequestBody Map<String, String> parameters) {
 		if (parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT) == null
 				|| parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD) == null) {
 			throw new BackendException(ExceptionCode.REQUEST_PARAMS_NULL);
@@ -69,6 +63,68 @@ public class UserAPIController {
 		String userToken = userService.createUser(parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT),
 				parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD));
 		return generateTokenResult(userToken);
+	}
+
+	/**
+	 * 用户登录接口.
+	 * <p>
+	 * 接口：IPAddress/api/user/login
+	 * </p>
+	 * 
+	 * @param parameters
+	 * @return APIResult
+	 */
+	@RequestMapping(value = "/login", method = RequestMethod.POST)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public APIResult<Map<String, String>> login(@RequestBody Map<String, String> parameters) {
+		if (parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT) == null
+				|| parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD) == null) {
+			throw new BackendException(ExceptionCode.REQUEST_PARAMS_NULL);
+		}
+		// TODO 暂时返回手机号码
+		return generateTokenResult(userService.login(parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT),
+				parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD)));
+	}
+	
+	/**
+	 * 更改密码
+	 * <p>
+	 * 接口：IPAddress/api/user/updatePassword
+	 * </p>
+	 * 
+	 * @param parameters
+	 * @return APIResult
+	 */
+	@RequestMapping(value = "updatePassword", method = RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public APIResult<Map<String, String>> updatePasword(@RequestBody Map<String, String> parameters) {
+		if (parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT) == null 
+				|| parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD) == null) {
+			throw new BackendException(ExceptionCode.REQUEST_PARAMS_NULL);
+		}
+		Map<String, String> map = new HashMap<String, String>();
+
+		map.put(UserConstants.TOKEN, userService.changeUserPassword(parameters.get(UserConstants.PARAM_KEY_USER_ACCOUNT),
+				parameters.get(UserConstants.PARAM_KEY_USER_PASSWORD)));
+		return new APIResult<Map<String, String>>(map);
+	}
+	
+	/**
+	 * 更新用户令牌.
+	 * <p>
+	 * 接口：IPAddress/api/user/refreshToken
+	 * </p>
+	 * 
+	 * @param userToken
+	 * @return APIResult
+	 */
+	@RequestMapping(value = "/refreshToken", method = RequestMethod.PUT)
+	@ResponseStatus(value = HttpStatus.OK)
+	@ResponseBody
+	public APIResult<Map<String, String>> refreshToken(@RequestHeader("token") String userToken) {
+		return generateTokenResult(userService.reLogin(userToken));
 	}
 
 	/**
@@ -86,12 +142,9 @@ public class UserAPIController {
 	@ResponseBody
 	public APIResult<String> upload(@RequestHeader("token") String userToken,
 			@RequestParam("file") MultipartFile file) {
-		String filePath = "/static/avatar/" + System.currentTimeMillis() + "_"
-				+ RandomUtil.generate6Int() + ".jpg";
+		String filePath = "/static/avatar/" + System.currentTimeMillis() + "_" + RandomUtil.generate6Int() + ".jpg";
 		try {
-			File f = new File(
-					"I:/Android/ProfessorAfternoonTea/backend/ProfessorTea/src/main/webapp"
-							+ filePath);
+			File f = new File("I:/Android/ProfessorAfternoonTea/backend/ProfessorTea/src/main/webapp" + filePath);
 			// File f = new File("C:/virtualhost/professortea/ROOT/" +
 			// filePath);
 			if (!f.getParentFile().exists()) {
@@ -117,75 +170,10 @@ public class UserAPIController {
 	@RequestMapping(value = "/userInfo", method = RequestMethod.GET)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public APIResult<Map<String, Object>> findUserInfo(
-			@RequestHeader("token") String userToken) {
+	public APIResult<Map<String, Object>> findUserInfo(@RequestHeader("token") String userToken) {
 		Map<String, Object> map = new HashMap<String, Object>();
 		map.put("userInfo", userService.getUserInfo(userToken));
 		return new APIResult<Map<String, Object>>(map);
-	}
-
-	/**
-	 * 用户登录接口.
-	 * <p>
-	 * 接口：IPAddress/api/user/login
-	 * </p>
-	 * 
-	 * @param parameters
-	 * @return APIResult
-	 */
-	@RequestMapping(value = "/login", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public APIResult<Map<String, String>> login(
-			@RequestBody Map<String, String> parameters) {
-		if (parameters.get("mobile") == null
-				|| parameters.get("password") == null) {
-			throw new BackendException(100010);
-		}
-		return generateTokenResult(userService.login(parameters.get("mobile"),
-				parameters.get("password")));
-	}
-
-	/**
-	 * 更新用户令牌.
-	 * <p>
-	 * 接口：IPAddress/api/user/refreshToken
-	 * </p>
-	 * 
-	 * @param userToken
-	 * @return APIResult
-	 */
-	@RequestMapping(value = "/refreshToken", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public APIResult<Map<String, String>> refreshToken(
-			@RequestHeader("token") String userToken) {
-		return generateTokenResult(userService.reLogin(userToken));
-	}
-
-	/**
-	 * 更改密码
-	 * <p>
-	 * 接口：IPAddress/api/user/updatePassword
-	 * </p>
-	 * 
-	 * @param parameters
-	 * @return APIResult
-	 */
-	@RequestMapping(value = "updatePassword", method = RequestMethod.PUT)
-	@ResponseStatus(value = HttpStatus.OK)
-	@ResponseBody
-	public APIResult<Map<String, String>> updatePasword(
-			@RequestBody Map<String, String> parameters) {
-		if (parameters.get("mobile") == null
-				|| parameters.get("password") == null) {
-			throw new BackendException(1000010);
-		}
-		Map<String, String> map = new HashMap<String, String>();
-
-		map.put("userToken", userService.changeUserPassword(
-				parameters.get("mobile"), parameters.get("password")));
-		return new APIResult<Map<String, String>>(map);
 	}
 
 	/**
@@ -201,8 +189,7 @@ public class UserAPIController {
 	@RequestMapping(value = "/userInfo", method = RequestMethod.PUT)
 	@ResponseStatus(value = HttpStatus.OK)
 	@ResponseBody
-	public APIResult<Integer> updateUserInfo(
-			@RequestBody Map<String, String> parameters,
+	public APIResult<Integer> updateUserInfo(@RequestBody Map<String, String> parameters,
 			@RequestHeader("token") String userToken) {
 		if (parameters != null) {
 			userService.updateUserInfo(userToken, parameters);
@@ -220,7 +207,7 @@ public class UserAPIController {
 	 */
 	private APIResult<Map<String, String>> generateTokenResult(String userToken) {
 		Map<String, String> result = new HashMap<String, String>();
-		result.put("userToken", userToken);
+		result.put(UserConstants.TOKEN, userToken);
 		return new APIResult<Map<String, String>>(result);
 	}
 }

@@ -27,4 +27,13 @@ public class UserConstants {
 	 */
 	public static final String PARAM_KEY_USER_PASSWORD = "userPwd";
 	
+	/**
+	 * 用户手机号
+	 */
+	public static final String USER_MOBILE = "mobile";
+	
+	/**
+	 * 用户密码
+	 */
+	public static final String USER_PASSWORD = "password";
 }
